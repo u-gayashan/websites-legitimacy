@@ -1,1 +1,0 @@
-export const STORAGE_KEY = 'google_authenticated_user_info';
