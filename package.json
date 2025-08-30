@@ -89,14 +89,16 @@
   "manifest": {
     "host_permissions": [
       "https://*/*",
-      "https://*.googleapis.com/*"
+      "https://*.googleapis.com/*",
+      "https://*.accounts.google.com/"
     ],
     "permissions": [
       "storage",
       "scripting",
       "tabs",
       "identity",
-      "activeTab"
+      "activeTab",
+      "cookies"
     ],
     "oauth2": {
       "client_id": "659172221368-3octraj0lupp114hi0gbsvfv99c0l7pn.apps.googleusercontent.com",

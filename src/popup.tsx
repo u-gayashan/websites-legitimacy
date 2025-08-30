@@ -9,10 +9,9 @@ import AuthenticatedGoogleCard from '~components/auth/AuthenticatedGoogleCard';
 import PopUpHeader from '~components/popup/PopUpHeader';
 import { GoogleSignInButton } from '~components/auth/GoogleSignInButton';
 import { registerUser } from '~api/userApi'; // Import the API function
-
 // import logo from '../assets/logo.png';
 
-const STORAGE_KEY = 'google_authenticated_user_info';
+const STORAGE_KEY = process.env.PLASMO_PUBLIC_STORAGE_KEY
 
 const Popup = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);

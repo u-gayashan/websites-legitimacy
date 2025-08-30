@@ -5,8 +5,9 @@ import { SideBar } from "~pages/SideBar"
 
 export const config: PlasmoCSConfig = {
   // it should only work in google.com
-  matches: ["https://www.google.com/*", "https://www.google.co.in/*"],
+  // matches: ["https://www.google.com/*", "https://www.google.co.in/*"],
   // matches: ["<all_urls>"]
+  run_at: "document_end",
 }
 
 interface UserInfo {
@@ -74,16 +75,13 @@ const PlasmoOverlay = () => {
       sendResponse: (response?: any) => void
     ) => {
       if (message.type === "USER_INFO_UPDATED") {
-        console.log("Content script received user update:", message.payload)
         setUserInfo(message.payload)
         sendResponse({ success: true })
       }
 
       if (message.type === "TOGGLE_SIDEBAR") {
-        console.log("Content script toggling sidebar")
         setIsOpen((prev) => !prev)
         if (message.payload) {
-          console.log("User info received from message:", message.payload)
           setUserInfo(message.payload)
         }
         sendResponse({ success: true })

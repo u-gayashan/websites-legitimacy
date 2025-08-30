@@ -1,9 +1,4 @@
-import { send } from "process"
-import { GoogleAutheService } from "~api/googleAuthService"
-
-
-
-const userInfo = {}; // Replace with actual user information if available
+const userInfo = {};
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "BROADCAST_USER_INFO") {
         chrome.tabs.query({}, (tabs) => {
@@ -66,6 +61,17 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                 }
 
                 await chrome.storage.local.remove('google_authenticated_user_info');
+                [".google.com", ".accounts.google.com"].forEach(domain => {
+                    chrome.cookies.getAll({ domain }, (cookies) => {
+                        for (const cookie of cookies) {
+                            chrome.cookies.remove({
+                                url: `https${cookie.secure ? "s" : ""}://${cookie.domain}${cookie.path}`,
+                                name: cookie.name
+                            });
+                        }
+                    });
+                });
+
                 console.log('Removed user info from storage.');
                 sendResponse({ success: true });
             } catch (err) {
@@ -73,6 +79,20 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                 sendResponse({ success: false });
             }
         })();
-        return true; // Indicates that the response will be sent asynchronously
+        return true;
+    }
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === "BROADCAST_CLOSE_SIDEBAR") {
+        chrome.tabs.query({}, (tabs) => {
+            for (const tab of tabs) {
+                if (tab.id) {
+                    chrome.tabs.sendMessage(tab.id, { type: "CLOSE_SIDEBAR" });
+                }
+            }
+        });
+        sendResponse({ success: true });
+        return true;
     }
 });
